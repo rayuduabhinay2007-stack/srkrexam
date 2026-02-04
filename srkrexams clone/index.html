@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SRKR – Students Examination Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #f5fbff; /* same as page, removes visible outer box */
+      overflow-x: hidden;  /* prevent horizontal scroll on small screens */
+    }
+
+    .page {
+      width: 100%;        /* fill entire screen width */
+      min-height: 100vh;  /* at least full viewport height */
+      background: #f5fbff;
+      margin: 0;          /* no centering margin */
+      border: none;       /* remove left/right borders creating box effect */
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(90deg, #f3f3f3, #e4e4e4);
+      color: #1873ab;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center; /* center logo + text horizontally */
+      gap: 16px;
+    }
+
+    .header-logo {
+      width: 70px;
+      height: 70px;
+      background: #fff;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-logo img {
+      width: 90%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .header-text h2 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .header-text p {
+      font-size: 11px;
+      margin-top: 2px;
+    }
+    .header-text{
+        text-align: center;
+    }
+
+    .sub-header {
+      background: #0c5f99;
+      color: #fff;
+      text-align: center;
+      padding: 6px 10px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Nav bar */
+    .nav {
+      display: flex;
+      gap: 1px;
+      background: #0a5385;
+    }
+
+    .nav a {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+      text-decoration: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      background: #0d64a5;
+      transition: background 0.2s;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background: #0f7cc1;
+    }
+
+    /* Content layout */
+    .content {
+      display: flex;
+      gap: 24px;
+      padding: 16px 24px 40px;
+    }
+
+    /* Left: notices */
+    .notices-wrapper {
+      flex: 3;
+      background: #fff;
+      border: 1px solid #d0dbe7;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .notices-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid #d0dbe7;
+      font-weight: 600;
+      font-size: 14px;
+      background: #f5f9ff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .notices-header span.new-label {
+      color: #0d8c1b;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .notices-table-wrapper {
+      max-height: 420px;
+      overflow-y: auto;
+    }
+
+    table.notices {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    table.notices thead {
+      background: #0f7cc1;
+      color: #fff;
+    }
+
+    table.notices th,
+    table.notices td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e7f0;
+      vertical-align: top;
+    }
+
+    table.notices th {
+      text-align: left;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    table.notices tbody tr:nth-child(even) {
+      background: #f5f9ff;
+    }
+
+    table.notices td.sno {
+      width: 40px;
+      text-align: center;
+    }
+
+    table.notices td.date {
+      width: 100px;
+      white-space: nowrap;
+    }
+
+    table.notices td.description {
+      width: auto;
+      line-height: 1.4;
+    }
+
+    .notice-new {
+      color: #0f8f1d;
+      font-weight: 600;
+      margin-left: 6px;
+      font-size: 11px;
+    }
+
+    /* Right: login & contact */
+    .sidebar {
+      flex: 1.4;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .card {
+      background: #f5fbff;
+      border: 1px solid #d0dbe7;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      padding: 16px 18px 18px;
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 12px;
+      color: #0b568b;
+      text-align: center;
+    }
+
+    .field-group {
+      margin-bottom: 12px;
+    }
+
+    .field-label {
+      font-size: 13px;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .input {
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 3px;
+      border: 1px solid #b6c6d9;
+      font-size: 13px;
+    }
+
+    .login-btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px 0;
+      border: none;
+      border-radius: 3px;
+      background: #0f7cc1;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .login-btn:hover {
+      background: #0c649b;
+    }
+
+    .login-error {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #c62828;
+      display: none;
+    }
+
+    .contact {
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .contact a {
+      color: #0f7cc1;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* Footer */
+    .footer {
+      background: #0a5385;
+      color: #fff;
+      font-size: 11px;
+      padding: 8px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #063458;
+    }
+
+    .footer span.highlight {
+      color: #ffd54f;
+      font-weight: 600;
+      margin: 0 4px;
+    }
+
+    .footer-right {
+      font-size: 11px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .content {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Top header -->
+    <header class="header">
+      <div class="header-logo">
+        <!-- Replace src with your real logo file -->
+        <img src="assets/logo.png" alt="College Logo" />
+      </div>
+      <div class="header-text">
+        <h1>SAGI RAMA KRISHNAM RAJU ENGINEERING COLLEGE (AUTONOMOUS)</h1>
+        <h2>CHINA AMIRAM, BHIMAVARAM, ANDHRA PRADESH, INDIA, PIN‑534204</h2>
+        <p>STUDENTS EXAMINATION PORTAL</p>
+      </div>
+    </header>
+
+    <div class="sub-header">STUDENTS EXAMINATION PORTAL</div>
+
+    <!-- Navigation bar -->
+    <nav class="nav">
+      <a href="#" class="active">Home</a>
+      <a href="#">Results</a>
+      <a href="#">Downloads</a>
+      <a href="#">Timetables</a>
+      <a href="#">Applications</a>
+      <a href="#">Degree Verification</a>
+    </nav>
+
+    <!-- Main content -->
+    <main class="content">
+      <!-- Left: Notices -->
+      <section class="notices-wrapper">
+        <div class="notices-header">
+          <span>Notifications / Circulars</span>
+          <span class="new-label">NEW</span>
+        </div>
+
+        <div class="notices-table-wrapper">
+          <table class="notices">
+            <thead>
+              <tr>
+                <th style="width:40px;">S.No.</th>
+                <th style="width:100px;">Date</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Sample rows mimicking screenshot data -->
+              <tr>
+                <td class="sno">1</td>
+                <td class="date">02‑02‑2026</td>
+                <td class="description">
+                  Circular – All II &amp; III B.Tech students are informed that the II Semester – I
+                  Internal Exams, scheduled from 09‑02‑2026, will now start from 10‑02‑2026.
+                  <span class="notice-new">NEW</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="sno">2</td>
+                <td class="date">31‑01‑2026</td>
+                <td class="description">
+                  Last date for M.Tech‑RV‑Subjects Registration Details for student verification
+                  (R19‑M.Tech‑2‑1) Reg Supply Examinations‑DEC‑2025 on or before 02/02/2026 (12.00 PM).
+                  <span class="notice-new">NEW</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="sno">3</td>
+                <td class="date">31‑01‑2026</td>
+                <td class="description">
+                  Last date for B.Tech‑RV‑Subjects Registration Details for student verification‑R19
+                  (4‑2, 4‑1, 2‑2) &amp; R17 (4‑2 &amp; 4‑1 &amp; 2‑2) &amp; R23 (2‑2) Supply
+                  Examinations‑NOV/DEC‑2025 on or before 02/02/2026 (12.00 PM).
+                  <span class="notice-new">NEW</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="sno">4</td>
+                <td class="date">23‑01‑2026</td>
+                <td class="description">
+                  Last date for Online payment of Revaluation fee‑R19‑(4‑2 &amp; 4‑1 &amp; 2‑2) &amp;
+                  R17‑(4‑2 &amp; 4‑1 &amp; 2‑2) R20‑(2‑2) &amp; R20‑(4‑1 Honors &amp;
+                  Minors‑Regular) &amp; R23‑(2‑2) Supply Examinations‑NOV/DEC‑2025 on or before
+                  27/01/2026 (04.00 PM).
+                  <span class="notice-new">NEW</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="sno">5</td>
+                <td class="date">23‑01‑2026</td>
+                <td class="description">
+                  Last date for Online payment of Revaluation fee‑R20, R17, R23, R19‑B.Tech/
+                  M.Tech‑(2‑1 &amp; 2‑2 &amp; 3‑1 &amp; 3‑2 &amp; 4‑1 &amp; 4‑2) &amp; R20‑B.Tech‑
+                  4‑1‑Honors &amp; Minors degree‑Regular &amp; Supply Examinations‑NOV/DEC‑2025 on
+                  or before 27/01/2026 (04.00 PM).
+                  <span class="notice-new">NEW</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="sno">6</td>
+                <td class="date">19‑01‑2026</td>
+                <td class="description">
+                  Last date for B.Tech‑RV‑Subjects Registration Details for student verification
+                  (R20)‑IV B.Tech I sem Regular &amp; Supply Examinations‑NOV‑2025 on or before
+                  20/01/2026 (12.00 PM).
+                  <span class="notice-new">NEW</span>
+                </td>
+              </tr>
+              <!-- Add more rows as needed -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Right: Login and controller info -->
+      <aside class="sidebar">
+        <div class="card">
+          <div class="card-title">SIGN IN HERE</div>
+          <form id="loginForm">
+            <div class="field-group">
+              <label class="field-label" for="username">Username</label>
+              <input class="input" type="text" id="username" name="username" required />
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="password">Password</label>
+              <input class="input" type="password" id="password" name="password" required />
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+            <div id="loginError" class="login-error">
+              Invalid username or password. Please try again.
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="contact">
+            <div style="font-weight:700; margin-bottom:4px;">
+              CONTROLLER OF EXAMINATIONS
+            </div>
+            <div>Mobile : 9100363888</div>
+            <div>
+              Email :
+              <a href="mailto:coesrkr@gmail.com">coesrkr@gmail.com</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div>
+        &copy; 2018. All rights reserved. SRKREC |
+        <a href="#" style="color:#fff; text-decoration:underline;">Privacy Policy</a> |
+        <span class="highlight">Monday, February 2, 2026 at 07:00:35 PM</span>
+      </div>
+      <div class="footer-right">
+        Powered by: <span style="font-weight:600;">D Base Solutions</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Preset credentials (change as you like)
+    const VALID_USERNAME = "24B91A05Z3"; // username
+    const VALID_PASSWORD = "24B91A05Z3"; // password
+
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      const errorBox = document.getElementById("loginError");
+
+      if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+        // On successful login, redirect to another page
+        window.location.href = "dashboard.html";
+      } else {
+        errorBox.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
